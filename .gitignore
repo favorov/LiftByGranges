@@ -1,0 +1,7 @@
+**/cache/**
+.Rdata
+.Rhistory
+*~
+*.swp
+*.Rproj
+.*
