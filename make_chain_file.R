@@ -15,32 +15,17 @@
 #' 
 
 GRangesMappingToChainFile<-function(input_gtf, out_chain_name, chrom_suffix = "exome", verbose=FALSE, concise=TRUE){
-  # first install necessary packages, rtracklayer and plyranges
+  # first load necessary packages, rtracklayer, plyranges, and TxDb.Hsapiens.UCSC.hg19.knownGene
   if(require("rtracklayer")){
     if(verbose==TRUE){print("rtracklayer is loaded correctly")}
-  } else {
-    print("trying to install rtracklayer")
-    if (!requireNamespace("BiocManager", quietly = TRUE))
-      install.packages("BiocManager")
-      BiocManager::install("rtracklayer")
-    if(require(rtracklayer)){print("rtracklayer installed and loaded")} else {stop("could not install rtracklayer")}
-  }
+  } else {print("please install rtracklayer")}
   if(require("plyranges")){
     if(verbose==TRUE){print("plyranges is loaded correctly")}
-  } else {
-    print("trying to install plyranges")
-    install.packages("plyranges")
-    if(require(plyranges)){print("plyranges installed and loaded")} else {stop("could not install plyranges")}
-  }
+  } else {print("please install plyranges")}
   if(require("TxDb.Hsapiens.UCSC.hg19.knownGene")){
     if(verbose==TRUE){print("TxDb.Hsapiens.UCSC.hg19.knownGene is loaded correctly")}
-  } else {
-    print("trying to install TxDb.Hsapiens.UCSC.hg19.knownGene")
-    if (!requireNamespace("BiocManager", quietly = TRUE))
-      install.packages("BiocManager")
-    BiocManager::install("TxDb.Hsapiens.UCSC.hg19.knownGene")
-    if(require(TxDb.Hsapiens.UCSC.hg19.knownGene)){print("TxDb.Hsapiens.UCSC.hg19.knownGene installed and loaded")} else {stop("could not install TxDb.Hsapiens.UCSC.hg19.knownGene")}
-  }
+  } else {print("please install TxDb.Hsapiens.UCSC.hg19.knownGene")}
+  
   #create seqinfo object for all chromosomes to get lengths
   seqinft19<-as.data.frame(seqinfo(TxDb.Hsapiens.UCSC.hg19.knownGene))
   seqinf19<-as(seqinft19[nchar(rownames(seqinft19))<6,],"Seqinfo")
