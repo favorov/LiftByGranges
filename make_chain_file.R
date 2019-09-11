@@ -5,7 +5,8 @@
 #' @param input_gtf The name of the gtf/gff file that will be converted to an exome chain file
 #' @param out_chain_name The name of the chain file to be created
 #' @param chrom_suffix The suffix to be appended to all chromosome names created in the chain file
-#' @param verbose Whether updates are desired while the function is running
+#' @param verbose Output updates while the function is running. Default FALSE
+#' @param concise Consolidate non-conflicting contiguous chains. For downstream analysis wherein specific transcripts will be used, recommended use is FALSE. Default TRUE
 #' 
 #' @examples 
 #' \dontrun{
@@ -13,7 +14,7 @@
 #' }
 #' 
 
-GRangesMappingToChainFile<-function(input_gtf, out_chain_name, chrom_suffix = "exome", verbose=FALSE){
+GRangesMappingToChainFile<-function(input_gtf, out_chain_name, chrom_suffix = "exome", verbose=FALSE, concise=TRUE){
   # first install necessary packages, rtracklayer and plyranges
   if(require("rtracklayer")){
     if(verbose==TRUE){print("rtracklayer is loaded correctly")}
