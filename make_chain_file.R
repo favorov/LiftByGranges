@@ -89,4 +89,8 @@ GRangesMappingToChainFile<-function(input_gtf, out_chain_name, chrom_suffix = "e
       if(verbose==TRUE){print(paste("Chromosome", chr, "strand", str, "complete"))}
     }
   }
+  #this is a band-aid fix since import cannot differentiate chains without a truly blank line between chains
+  remove_blanks<-readLines(out_chain_name)
+  remove_blanks<-gsub("\t\t", "", remove_blanks)
+  write(remove_blanks, file=out_chain_name, sep="")
 }
