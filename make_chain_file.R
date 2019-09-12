@@ -50,19 +50,19 @@ GRangesMappingToChainFile<-function(input_gtf, out_chain_name, chrom_suffix = "e
         gtf_t<-gtf_hold[(elementMetadata(gtf_hold)[,"transcript_id"] == t)]
         length_t<-sum(gtf_t@ranges@width)
         end_position<-start_position+length_t-1
-        first_line<-c(paste0("chain 42 ", chr, "_", sign, "_", chrom_suffix, " ", length_chr, " ",
-                           str, " ", start_position, " ", end_position, " ", chr, " ",
-                           seqinf19@seqlengths[which(seqinf19@seqnames==chr)], " ", str, " ", gtf_t@ranges@start[1], " ",
-                           gtf_t@ranges@start[length(gtf_t@ranges@start)]+gtf_t@ranges@width[length(gtf_t@ranges@width)]-1,
-                           " ", t), "", "")
+        first_line<-c(paste0("chain 42 ", chr, " ", seqinf19@seqlengths[which(seqinf19@seqnames==chr)], 
+                             " ", str, " ", gtf_t@ranges@start[1], " ", 
+                             gtf_t@ranges@start[length(gtf_t@ranges@start)]+gtf_t@ranges@width[length(gtf_t@ranges@width)]-1,
+                             " ", chr, "_", sign, "_", chrom_suffix, " ", length_chr, " ", str, " ", 
+                             start_position, " ", end_position," ", t), "", "")
         txpt<-matrix(NA, nrow=length(gtf_t@ranges@start), ncol=3)
         txpt[,1]<-gtf_t@ranges@width
         if(length(gtf_t@ranges@width)>1){ #for cases where there is only 1 exon in a transcript
-          txpt[,2]<-0
-          txpt[nrow(txpt),2]<-""
-          txpt[,3]<-c(gtf_t@ranges@start[2:length(gtf_t@ranges@start)]-
+          txpt[,2]<-c(gtf_t@ranges@start[2:length(gtf_t@ranges@start)]-
                         (gtf_t@ranges@width[1:(length(gtf_t@ranges@width)-1)]+
-                           gtf_t@ranges@start[1:(length(gtf_t@ranges@width)-1)])-1, "")
+                         gtf_t@ranges@start[1:(length(gtf_t@ranges@width)-1)])-1, "")
+          txpt[,3]<-0
+          txpt[nrow(txpt),3]<-""
         }
         chrom_chains[row,]<-first_line
         chrom_chains[(row+1):(row+nrow(txpt)),]<-txpt
