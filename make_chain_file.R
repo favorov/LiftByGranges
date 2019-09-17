@@ -6,15 +6,19 @@
 #' @param out_chain_name The name of the chain file to be created
 #' @param chrom_suffix The suffix to be appended to all chromosome names created in the chain file
 #' @param verbose Output updates while the function is running. Default FALSE
-#' @param concise Consolidate non-conflicting contiguous chains. For downstream analysis wherein specific transcripts will be used, recommended use is FALSE. Default TRUE
+#' @param transcript_list a vector of transcript names that represent the most expressed isoform of their respective genes and correspond to gtf annotation names
 #' 
 #' @examples 
 #' \dontrun{
-#' GRangesMappingToChainFile("hg19_annotations_ensembl.gtf", "hg19_annotations_ensembl_exome.chain", verbose=T)
+#' GRangesMappingToChainFile("hg19_annotations_ensembl.gtf",
+#'   "hg19_annotations_ensembl_exome.chain",
+#'   c("ENST00000600805", "ENST00000595082", "ENST00000597230", "ENST00000595005")
+#'   chrom_suffix="exome_muscle",
+#'   verbose=T,)
 #' }
 #' 
 
-GRangesMappingToChainFile<-function(input_gtf, out_chain_name, chrom_suffix = "exome", verbose=FALSE, concise=TRUE){
+GRangesMappingToChainFile<-function(input_gtf, out_chain_name, transcript_list, chrom_suffix = "exome", verbose=FALSE){
   # first load necessary packages, rtracklayer, plyranges, and TxDb.Hsapiens.UCSC.hg19.knownGene
   if(require("rtracklayer")){
     if(verbose==TRUE){print("rtracklayer is loaded correctly")}
@@ -33,11 +37,12 @@ GRangesMappingToChainFile<-function(input_gtf, out_chain_name, chrom_suffix = "e
   system(paste0("test -e ", out_chain_name, " && rm ", out_chain_name))
   gtf<-import(input_gtf)
   gtf<-gtf %>% filter(type == "exon") #since only care about exome
+  gtf_transcripts<-gtf[(elementMetadata(gtf)[,"transcript_id"] %in% transcript_list)]
   if(verbose==TRUE){print("annotation data finished loading")}
   for(chr in seqinf19@seqnames){
     for(str in c("-", "+")){
       if(verbose==TRUE){print(paste("Chromosome", chr, "strand", str, "starting"))}
-      gtf_hold<-gtf %>% filter(strand==str, seqnames==chr)
+      gtf_hold<-gtf_transcripts %>% filter(strand==str, seqnames==chr)
       if(length(gtf_hold@ranges)==0){next} # in case of chromosomes without data on one strand
       length_chr<-sum(gtf_hold@ranges@width)
       if(str=="+"){sign<-"plus"}else{sign<-"minus"}
