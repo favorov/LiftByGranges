@@ -7,7 +7,7 @@
 #' @param chrom_suffix The suffix to be appended to all chromosome names created in the chain file
 #' @param verbose Output updates while the function is running. Default FALSE
 #' @param transcript_list a vector of transcript names that represent the most expressed isoform of their respective genes and correspond to gtf annotation names
-#' @param alignment The human genome alignment to be used, either "hg19" or "hg38". Default "hg19"
+#' @param alignment The human genome alignment used, either "hg19" or "hg38". Default "hg19"
 #' 
 #' @examples 
 #' \dontrun{
