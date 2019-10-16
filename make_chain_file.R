@@ -20,15 +20,15 @@
 
 GRangesMappingToChainFile<-function(input_gtf, out_chain_name, transcript_list, chrom_suffix = "exome", verbose=FALSE){
   # first load necessary packages, rtracklayer, plyranges, and TxDb.Hsapiens.UCSC.hg19.knownGene
-  if(require("rtracklayer")){
+  if("rtracklayer" %in% gsub("package:", "", search())){
     if(verbose==TRUE){print("rtracklayer is loaded correctly")}
-  } else {print("please install rtracklayer")}
-  if(require("plyranges")){
+  } else {print("please install and/or load rtracklayer")}
+  if("plyranges" %in% gsub("package:", "", search())){
     if(verbose==TRUE){print("plyranges is loaded correctly")}
-  } else {print("please install plyranges")}
-  if(require("TxDb.Hsapiens.UCSC.hg19.knownGene")){
+  } else {print("please install and/or load plyranges")}
+  if("TxDb.Hsapiens.UCSC.hg19.knownGene" %in% gsub("package:", "", search())){
     if(verbose==TRUE){print("TxDb.Hsapiens.UCSC.hg19.knownGene is loaded correctly")}
-  } else {print("please install TxDb.Hsapiens.UCSC.hg19.knownGene")}
+  } else {print("please install and/or load TxDb.Hsapiens.UCSC.hg19.knownGene")}
   
   #create seqinfo object for all chromosomes to get lengths
   seqinft19<-as.data.frame(seqinfo(TxDb.Hsapiens.UCSC.hg19.knownGene))
