@@ -2,11 +2,11 @@
 #' 
 #' `GRangesMappingToChainFile` writes a chain file of the exome mapped from a genome annotation file.
 #' 
-#' @param input_gtf The name of the gtf/gff file that will be converted to an exome chain file
-#' @param out_chain_name The name of the chain file to be created
-#' @param chrom_suffix The suffix to be appended to all chromosome names created in the chain file
+#' @param input_gtf The name of the gtf/gff file that will be converted to an exome chain file. Required
+#' @param out_chain_name The name of the chain file to be created. Required
+#' @param chrom_suffix The suffix to be appended to all chromosome names created in the chain file. Default "exome"
 #' @param verbose Output updates while the function is running. Default FALSE
-#' @param transcript_list a vector of transcript names that represent the most expressed isoform of their respective genes and correspond to gtf annotation names
+#' @param transcript_list a vector of transcript names that represent the most expressed isoform of their respective genes and correspond to gtf annotation names. Required
 #' @param alignment The human genome alignment used, either "hg19" or "hg38". Default "hg19"
 #' 
 #' @examples 
