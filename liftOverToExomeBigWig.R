@@ -24,21 +24,15 @@
 
 liftOverToExomeBigWig<-function(input_bw, chain, output_bw, write_chr = TRUE, out_chr){
   # first load necessary packages, rtracklayer, plyranges, and dplyr
-  if("rtracklayer" %in% gsub("package:", "", search())){
-    if(verbose==TRUE){print("rtracklayer is loaded correctly")}
-  } else {print("please install and/or load rtracklayer")}
-  if("plyranges" %in% gsub("package:", "", search())){
-    if(verbose==TRUE){print("plyranges is loaded correctly")}
-  } else {print("please install and/or load plyranges")}
-  if("dplyr" %in% gsub("package:", "", search())){
-    if(verbose==TRUE){print("dplyr is loaded correctly")}
-  } else {print("please install and/or load dplyr")}
+  if("rtracklayer" %in% gsub("package:", "", search()) == F){print("please install and/or load rtracklayer")}
+  if("plyranges" %in% gsub("package:", "", search()) == F){print("please install and/or load plyranges")}
+  if("dplyr" %in% gsub("package:", "", search()) == F){print("please install and/or load dplyr")}
 
   if(length(input_bw)==2){
     f_bw<-input_bw[1]
     r_bw<-input_bw[2]
   } else if(length(input_bw)==1){
-    f_bw<-paste0(input_bw, "_foward.bw")
+    f_bw<-paste0(input_bw, "_forward.bw")
     r_bw<-paste0(input_bw, "_reverse.bw")
   } else{print("input_bw must be in in the format of c(forward_reads, reverse_reads). If file names end in '_forward.bw' and '_reverse.bw', input_bw can be a single string corresponding to the prefix of the files")}
   
@@ -48,14 +42,14 @@ liftOverToExomeBigWig<-function(input_bw, chain, output_bw, write_chr = TRUE, ou
   minus<-import(r_bw)
   strand(minus)<-"-"
   
-  chain<-import(chain, exclude="junk")
+  chain_object<-import(chain, exclude="junk")
   
-  liftOver_plus<-liftOver(plus, chain)
+  liftOver_plus<-liftOver(plus, chain_object)
   # remove any blank intervals (shouldn't be any >1)
   liftOver_plus<-liftOver_plus[(elementNROWS(range(liftOver_plus))==1L)] %>% unlist()
   liftOver_plus<-liftOver_plus[lapply(as.character(liftOver_plus@seqnames),
                                                           function(x){grepl("plus",x) == T}) %>% unlist()]
-  liftOver_minus<-liftOver(minus, chain)
+  liftOver_minus<-liftOver(minus, chain_object)
   # remove any blank intervals (shouldn't be any >1)
   liftOver_minus<-liftOver_minus[(elementNROWS(range(liftOver_minus))==1L)] %>% unlist()
   liftOver_minus<-liftOver_minus[lapply(as.character(liftOver_minus@seqnames),
