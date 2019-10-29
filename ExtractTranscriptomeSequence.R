@@ -20,12 +20,8 @@
 ExtractTranscriptomeSequence<-function(transcript_list, ref_genome, transcript_gtf,
                                        genome_gtf, exome_prefix="exome", out_gtf=T){
   # load necessary packages plyranges and rtracklayer
-  if("rtracklayer" %in% gsub("package:", "", search())){
-    if(verbose==TRUE){print("rtracklayer is loaded correctly")}
-  } else {print("please install and/or load rtracklayer")}
-  if("plyranges" %in% gsub("package:", "", search())){
-    if(verbose==TRUE){print("plyranges is loaded correctly")}
-  } else {print("please install and/or load plyranges")}
+  if("rtracklayer" %in% gsub("package:", "", search()) == F){print("please install and/or load rtracklayer")}
+  if("plyranges" %in% gsub("package:", "", search()) == F){print("please install and/or load plyranges")}
   
   # make sure there is a gtf file available; if there is, load in the information; if not, make one
   if(missing(genome_gtf)){
