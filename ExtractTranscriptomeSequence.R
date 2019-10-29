@@ -40,12 +40,8 @@ ExtractTranscriptomeSequence<-function(transcript_list, ref_genome, transcript_g
     write_gff(gtf_transcripts, input_gtf)
   }
   
-  
+  # call bedtools on local system, get FASTA sequences
+  system(paste0("bedtools getfasta -fi ", ref_genome, " -bed ", input_gtf, " -fo ", exome_prefix, ".fa"))
 
   if(out_gtf == F & missing(transcript_gtf)){system(paste0("rm ", input_gtf))}
 }
-
-
-
-
-
