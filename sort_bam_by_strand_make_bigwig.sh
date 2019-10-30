@@ -35,7 +35,7 @@ cat header.tmp forward.tmp | samtools view -S -b > "${prefix_output}_forward.bam
 
 rm forward.tmp
 
-samtools view G3BP1_rep1_sorted.bam | gawk '(! and(16,$2))' > reverse.tmp
+samtools view $input_bam | gawk '(! and(16,$2))' > reverse.tmp
 
 cat header.tmp reverse.tmp | samtools view -S -b > "${prefix_output}_reverse.bam"
 

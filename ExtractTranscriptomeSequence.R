@@ -7,7 +7,7 @@
 #' @param transcript_gtf The name of the exome GTF annotation file. Coordinates must match the file input for the ref_genome parameter. Required if there is no genome_gtf
 #' @param genome_gtf The name of the GTF/GFF file that contains all exome annotations. Coordinates must match the file input for the ref_genome parameter. Required if there is no transcript_gtf
 #' @param exome_prefix The prefix for all exome output files, including the FASTA. Default "exome"
-#' @param out_gtf Whether or not to keep the gtf of the transcripts. Default TRUE
+#' @param bedtools_path Necessary for individuals running R in a GUI on some versions of OSX
 #' 
 #' @examples 
 #' \dontrun{
@@ -18,7 +18,7 @@
 #'
 
 ExtractTranscriptomeSequence<-function(transcript_list, ref_genome, transcript_gtf,
-                                       genome_gtf, exome_prefix="exome", out_gtf=T){
+                                       genome_gtf, exome_prefix="exome"){
   # load necessary packages plyranges and rtracklayer
   if("rtracklayer" %in% gsub("package:", "", search()) == F){print("please install and/or load rtracklayer")}
   if("plyranges" %in% gsub("package:", "", search()) == F){print("please install and/or load plyranges")}
@@ -37,7 +37,6 @@ ExtractTranscriptomeSequence<-function(transcript_list, ref_genome, transcript_g
   }
   
   # call bedtools on local system, get FASTA sequences
-  system(paste0("bedtools getfasta -fi ", ref_genome, " -bed ", input_gtf, " -fo ", exome_prefix, ".fa"))
+  system(paste0("bedtools getfasta -s -fi ", ref_genome, " -bed ", input_gtf, " -fo ", exome_prefix, ".fa"))
 
-  if(out_gtf == F & missing(transcript_gtf)){system(paste0("rm ", input_gtf))}
 }
