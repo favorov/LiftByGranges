@@ -8,7 +8,6 @@
 #' @param verbose Output updates while the function is running. Default FALSE
 #' @param transcript_list a vector of transcript names that represent the most expressed isoform of their respective genes and correspond to gtf annotation names. Required
 #' @param alignment The human genome alignment used, either "hg19" or "hg38". Default "hg19"
-#' @param transcript_gtf Whether to output a gtf file exclusively including transcripts from transcript_list. The file name will be the chromosome suffix parameter. Default TRUE
 #' 
 #' @examples 
 #' \dontrun{
@@ -22,7 +21,7 @@
 
 GRangesMappingToChainFile<-function(input_gtf, out_chain_name, transcript_list,
                                     chrom_suffix = "exome", verbose=FALSE,
-                                    alignment="hg19", transcript_gtf=TRUE){
+                                    alignment="hg19"){
   # first load necessary packages, rtracklayer, plyranges, and TxDb.Hsapiens.UCSC.hg19.knownGene
   if("rtracklayer" %in% gsub("package:", "", search())){
     if(verbose==TRUE){print("rtracklayer is loaded correctly")}
@@ -51,8 +50,6 @@ GRangesMappingToChainFile<-function(input_gtf, out_chain_name, transcript_list,
   gtf<-gtf %>% filter(type == "exon") #since only care about exome
   gtf_transcripts<-gtf[(elementMetadata(gtf)[,"transcript_id"] %in% transcript_list)]
   if(verbose==TRUE){print("annotation data finished loading")}
-  # write transcript-only gtf file
-  if(transcript_gtf == T){ write_gff(gtf_transcripts, paste0(chrom_suffix, ".gtf")) }
   # write chain file chromosome-by-chromosome
   for(chr in seqinf@seqnames){
     for(str in c("-", "+")){
