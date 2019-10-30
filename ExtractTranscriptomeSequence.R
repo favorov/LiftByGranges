@@ -57,12 +57,8 @@ ExtractTranscriptomeSequence<-function(transcript_list, ref_genome,
       writeLines(sequence, outfile)
     }
     # Write all sequences in output file:
-    if(!is.list(sequences)){
-      write.oneseq(sequence = sequences, name = names)
-    } else {
       n.seq <- length(sequences)
       sapply(seq_len(n.seq), function(x) write.oneseq(sequence = as.character(sequences[[x]]), name = names[x]))
-    }
       close(outfile)
   }
   
@@ -75,8 +71,8 @@ ExtractTranscriptomeSequence<-function(transcript_list, ref_genome,
     }else{
       seq<-paste(txpt_tbl$V2, collapse="", sep="")
     }
-    hold_matrix[which(hold_matrix$V1==txpt),2]<-seq
+    hold_matrix[which(hold_matrix[,1]==txpt),2]<-seq
   }
   
-  write.fasta(hold_matrix$V2, hold_matrix$V1, paste0(exome_prefix, ".fa"))
+  write.fasta(hold_matrix[,2], hold_matrix[,1], paste0(exome_prefix, ".fa"))
 }
