@@ -47,5 +47,36 @@ ExtractTranscriptomeSequence<-function(transcript_list, ref_genome,
   edit_tbl$V1<-substr(edit_tbl$V1, 1, nchar(edit_tbl$V1)-2)
   edit_tbl$strand<-df$strand[match(df$names, edit_tbl$V1)] #get strand info
   
+  # write.fasta function is simplified from seqinr write.fasta
+  write.fasta <- function(sequences, names, file.out){
+    # Open output file:
+    outfile <- file(description = file.out, open = "w")
+    # Function to write one sequence in output file:
+    write.oneseq <- function(sequence, name){
+      writeLines(paste(">", name, sep = ""), outfile)
+      writeLines(sequence, outfile)
+    }
+    # Write all sequences in output file:
+    if(!is.list(sequences)){
+      write.oneseq(sequence = sequences, name = names)
+    } else {
+      n.seq <- length(sequences)
+      sapply(seq_len(n.seq), function(x) write.oneseq(sequence = as.character(sequences[[x]]), name = names[x]))
+    }
+      close(outfile)
+  }
   
+  hold_matrix<-matrix(NA, ncol=2, nrow=length(unique(edit_tbl$V1)))
+  hold_matrix[,1]<-unique(edit_tbl$V1)
+  for(txpt in unique(edit_tbl$V1)){
+    filter(edit_tbl, V1 == txpt) -> txpt_tbl
+    if(unique(txpt_tbl$strand)== "-"){
+      seq<-paste(rev(txpt_tbl$V2), collapse="", sep="")
+    }else{
+      seq<-paste(txpt_tbl$V2, collapse="", sep="")
+    }
+    hold_matrix[which(hold_matrix$V1==txpt),2]<-seq
+  }
+  
+  write.fasta(hold_matrix$V2, hold_matrix$V1, paste0(exome_prefix, ".fa"))
 }
