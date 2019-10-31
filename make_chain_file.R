@@ -52,9 +52,9 @@ GRangesMappingToChainFile<-function(input_gtf, out_chain_name, transcript_list,
   if(verbose==TRUE){print("annotation data finished loading")}
   # write chain file chromosome-by-chromosome
   if(sum(gtf_transcripts@seqnames %in% seqinf@seqnames) == 0){
-    seqinf@seqnames<-substr(seqinf@seqnames, 4, nchar(seqinf@seqnames))
+    gtf_transcripts@seqnames<-paste0("chr", gtf_transcripts@seqnames) %>% Rle()
     if(sum(gtf_transcripts@seqnames %in% seqinf@seqnames) == 0){
-      return("GTF chromosomes do not resemble UCSC chromosome names.\nSuggested format: 'chr#' or just # for chromosome name")
+      return("GTF chromosomes do not resemble UCSC chromosome names. Suggested format: 'chr#' or just # for chromosome name, e.g. chr1 chr10 chrM")
     }
   }
   for(chr in seqinf@seqnames){
