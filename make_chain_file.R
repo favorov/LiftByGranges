@@ -25,20 +25,20 @@ GRangesMappingToChainFile<-function(input_gtf, out_chain_name, transcript_list,
   # first load necessary packages, rtracklayer, plyranges, and TxDb.Hsapiens.UCSC.hg19.knownGene
   if("rtracklayer" %in% gsub("package:", "", search())){
     if(verbose==TRUE){print("rtracklayer is loaded correctly")}
-  } else {print("please install and/or load rtracklayer")}
+  } else {return("please install and/or load rtracklayer")}
   if("plyranges" %in% gsub("package:", "", search())){
     if(verbose==TRUE){print("plyranges is loaded correctly")}
-  } else {print("please install and/or load plyranges")}
+  } else {return("please install and/or load plyranges")}
   if(alignment=="hg19"){
     if("TxDb.Hsapiens.UCSC.hg19.knownGene" %in% gsub("package:", "", search())){
       if(verbose==TRUE){print("TxDb.Hsapiens.UCSC.hg19.knownGene is loaded correctly")}
-    } else {print("please install and/or load TxDb.Hsapiens.UCSC.hg19.knownGene")}
+    } else {return("please install and/or load TxDb.Hsapiens.UCSC.hg19.knownGene")}
     seqinft<-as.data.frame(seqinfo(TxDb.Hsapiens.UCSC.hg19.knownGene))
   }
   if(alignment=="hg38"){
     if("TxDb.Hsapiens.UCSC.hg38.knownGene" %in% gsub("package:", "", search())){
       if(verbose==TRUE){print("TxDb.Hsapiens.UCSC.hg38.knownGene is loaded correctly")}
-    } else {print("please install and/or load TxDb.Hsapiens.UCSC.hg38.knownGene")}
+    } else {return("please install and/or load TxDb.Hsapiens.UCSC.hg38.knownGene")}
     seqinft<-as.data.frame(seqinfo(TxDb.Hsapiens.UCSC.hg38.knownGene))
   }
   
@@ -51,6 +51,12 @@ GRangesMappingToChainFile<-function(input_gtf, out_chain_name, transcript_list,
   gtf_transcripts<-gtf[(elementMetadata(gtf)[,"transcript_id"] %in% transcript_list)]
   if(verbose==TRUE){print("annotation data finished loading")}
   # write chain file chromosome-by-chromosome
+  if(sum(gtf_transcripts@seqnames %in% seqinf@seqnames) == 0){
+    seqinf@seqnames<-substr(seqinf@seqnames, 4, nchar(seqinf@seqnames))
+    if(sum(gtf_transcripts@seqnames %in% seqinf@seqnames) == 0){
+      return("GTF chromosomes do not resemble UCSC chromosome names.\nSuggested format: 'chr#' or just # for chromosome name")
+    }
+  }
   for(chr in seqinf@seqnames){
     for(str in c("-", "+")){
       if(verbose==TRUE){print(paste("Chromosome", chr, "strand", str, "starting"))}
