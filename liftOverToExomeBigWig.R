@@ -26,7 +26,6 @@ liftOverToExomeBigWig<-function(input_bw, chain, output_bw, write_chr = TRUE, ou
   # first load necessary packages, rtracklayer, plyranges, and dplyr
   if("rtracklayer" %in% gsub("package:", "", search()) == F){print("please install and/or load rtracklayer")}
   if("plyranges" %in% gsub("package:", "", search()) == F){print("please install and/or load plyranges")}
-  if("dplyr" %in% gsub("package:", "", search()) == F){print("please install and/or load dplyr")}
 
   #allow flexible naming systems for f and r bw files
   if(length(input_bw)==2){
