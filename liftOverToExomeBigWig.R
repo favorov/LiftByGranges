@@ -77,7 +77,6 @@ liftOverToExomeBigWig<-function(input_bw, chain, output_bw, write_chr = TRUE, ou
   if(write_chr==T){write.table(seq.info, out_chr, sep="\t", col.names = F, row.names = F, quote = F)}
   liftOver@seqinfo@seqlengths<-seq.info[,2] %>%
     as.character() %>% as.integer()
-  liftOver@elementMetadata$score<-1:length(liftOver) #arbitrary score
   liftOver<-liftOver[countOverlaps(liftOver,liftOver) <= 1L] # remove duplicates
   
   # output exome bw file
