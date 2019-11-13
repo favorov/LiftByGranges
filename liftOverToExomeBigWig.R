@@ -2,7 +2,7 @@
 #' 
 #' `liftOverToExomeBigWig` writes a BigWig exome file that is lifted over from two strand-separated BigWig files.
 #' 
-#' @param input_bw A vector of the names of input BigWig files in the format of c(forward_reads, reverse_reads). If file names end in '_forward.bw' and '_reverse.bw', it can be a single string corresponding to the prefix of the files. Required
+#' @param input_bw A vector of the names of input BigWig files in the format of c(forward_reads, reverse_reads) for strand-separated alignments or a single input BigWig file name. Required
 #' @param chain The name of the chain file to be used. Formet should be like chain files derived from `GRangesMappingToChainFile`. Required
 #' @param output_bw The name of the exome BigWig file. Required
 #' @param write_chr Whether to output a table of mapped chromosome names and lengths. Default TRUE
@@ -32,9 +32,9 @@ liftOverToExomeBigWig<-function(input_bw, chain, output_bw, write_chr = TRUE, ou
     f_bw<-input_bw[1]
     r_bw<-input_bw[2]
   } else if(length(input_bw)==1){
-    f_bw<-paste0(input_bw, "_forward.bw")
-    r_bw<-paste0(input_bw, "_reverse.bw")
-  } else{print("input_bw must be in in the format of c(forward_reads, reverse_reads). If file names end in '_forward.bw' and '_reverse.bw', input_bw can be a single string corresponding to the prefix of the files")}
+    f_bw<-input_bw
+    r_bw<-f_bw
+  } else{print("input_bw must be in in the format of c(forward_reads, reverse_reads) corresponding to foward and reverse BigWig file names for strand-separated alignments or must be a single input BigWig file name.")}
   
   #since reads are rev. complements, assign reads to the opposite strand
   plus<-import(f_bw)
