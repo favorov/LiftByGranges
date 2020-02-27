@@ -1,17 +1,17 @@
-#' Maps GRanges intervals into contiguous chain object.
+#' GRangesMappingToChainViaFile
 #' 
-#' `GRangesMappingToChainFile` creates a chain object based on intervals from a GRanges object.
+#' GRangesMappingToChainViaFile creates a \code{Chain} object based on intervals from a \code{GRanges} object. The mapping by this \code{Chain} will collapse chromosomes of the annotation into pseudogenome that are combined from tiled intervals of the \code{GRanges} object. 
 #' 
 #' @param input_GRanges A GRanges file with non-overlapping intervals that will be converted to a chain file. Required.
 #' @param out_chain_name The name of a chain file to be written in the local directory. Optional.
 #' @param chrom_suffix The suffix to be appended to all chromosome names created in the chain file, if desired.
 #' @param verbose Output updates while the function is running. Default FALSE
 #' @param alignment The human genome alignment used, either "hg19" or "hg38". Default "hg38"
-#' 
+#' @return a Chain object that maps all the chromosomes according to GRanges
 
-GRangesMappingToChainFile<-function(input_GRanges,
+GRangesMappingToChainViaFile<-function(input_GRanges,
                                     chrom_suffix = "",
-                                    out_chain_name= "",
+                                    out_chain_name = "",
                                     verbose=FALSE,
                                     alignment="hg38"){
   # first load necessary packages, rtracklayer, plyranges, and TxDb.Hsapiens.UCSC.hg19.knownGene or TxDb.Hsapiens.UCSC.hg38.knownGene
